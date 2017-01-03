@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>通过本地储存实现跳转页面后侧边栏保持状态实例</title>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="bootstrap.css">
+    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css">-->
+    <link rel="stylesheet" href="start.css">
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!--头部-->
+<header>
+    <nav class="navbar navbar-default" role="navigation">
+        <h2>通过本地储存实现跳转页面后侧边栏保持状态实例</h2>
+    </nav>
+</header>
+<div class="container-fluid">
+    <div class="container-inner clearfix">
+        <!--左侧菜单-->
+        <div class="sidebar" id="sidebar">
+            <script type="text/javascript">
+                try{ace.settings.check('sidebar' , 'fixed')}catch(e){}
+            </script>
+
+            <ul class="nav nav-list mainmenu">
+                <li class="memMenuTitle" data-index="1">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							用户管理
+						</span>
+                    </a>
+                </li>
+
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							报表统计
+						</span>
+                    </a>
+                </li>
+
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							内容管理
+						</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                随访表
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                宣教资料
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                诊断表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        药品管理
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                医院
+                            </a>
+                        </li>
+
+                        <li class="mainmenu2">
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                药房
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							订单管理
+						</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                处方订单
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                咨询订单
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                销售统计
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							病历管理
+						</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                病例
+                            </a>
+                        </li>
+
+                        <li data-index-inner="0">
+                            <a href="#" class="menuInnerA">
+                                随访表
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="memMenuTitle" data-index="0">
+                    <a href="#" class="menuTitle">
+                        <span class="menu-text">
+							系统日志
+						</span>
+                    </a>
+
+                    <ul class="submenu">
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                用户操作日志
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                管理员操作日志
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#" class="menuInnerA" data-index-inner="0">
+                                系统日志
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul><!-- /.nav-list -->
+        </div>
+        
+    </div>
+</div>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="jquery.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<!-- <script src="http://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
+<script type="text/javascript">
+/**
+ * Created by Gemingjie on 2016/12/8.
+ */
+$(document).ready(function(){
+    var collapseList={
+        clSubmenu:$(".submenu"),
+        clMainmenu:$(".mainmenu"),
+        init:function(){
+            this.ctrlMenu();
+            this.returnTop();
+            this.testmenu();
+        },
+        /*储存垂直菜单展开收起信息*/
+        strMenuKey : "memMenuTitle",
+        eleLeftMenuTit : $(".memMenuTitle"),
+        submenuKey : "submenu",
+        menuInnerA : $(".menuInnerA"),
+        arrDisplay : [],
+        arrInner : [],
+        funStoreDisplay : function() {
+            var that = this;
+            this.eleLeftMenuTit.each(function(index) {
+                that.arrDisplay[index] = that.eleLeftMenuTit.eq(index).attr('data-index');
+            });
+            console.log(that.arrDisplay);
+            //存储，IE6~7 cookie 其他浏览器HTML5本地存储
+            if (window.sessionStorage) {
+                sessionStorage.setItem(that.strMenuKey, that.arrDisplay);
+            } else {
+                $.cookie(that.strMenuKey, that.arrDisplay);
+            }
+        },
+        funStoreDisplayInner : function(){
+            var that = this;
+            this.menuInnerA.each(function(index) {
+                that.arrInner[index] = that.menuInnerA.eq(index).attr('data-index-inner');
+            });
+            console.log(that.arrInner);
+            //存储，IE6~7 cookie 其他浏览器HTML5本地存储
+            if (window.sessionStorage) {
+                sessionStorage.setItem(that.submenuKey, that.arrInner);
+            } else {
+                $.cookie(that.submenuKey, that.arrInner);
+            }
+        },
+        /*左侧边栏*/
+        ctrlMenu:function(){
+            this.clSubmenu.hide();
+            var that = this;
+            this.clMainmenu.on('click', 'li .menuTitle', function() {
+                $(this).siblings('.submenu').slideToggle();
+                $(this).parent().siblings().find('.submenu').slideUp();
+                $(this).parent().addClass('active').attr('data-index','1');
+                $(this).parent().siblings().removeClass('active').attr('data-index','0');
+                that.funStoreDisplay();
+            });
+            this.clSubmenu.on('click','li a',function () {
+                that.menuInnerA.removeClass("activeInner").attr('data-index-inner','0');
+                $(this).addClass("activeInner").attr('data-index-inner','1');
+                that.funStoreDisplayInner();
+            })
+        },
+        /*检测是否展开*/
+        testmenu:function () {
+            var strStoreDate = window.sessionStorage? sessionStorage.getItem(this.strMenuKey): $.cookie(this.strMenuKey);
+            var strStoreDateInner = window.sessionStorage? sessionStorage.getItem(this.submenuKey): $.cookie(this.submenuKey);
+            var that = this;
+            if (strStoreDate) {
+                var arrdisplay = strStoreDate.split(",");
+                this.eleLeftMenuTit.each(function(index) {
+                    console.log(arrdisplay[index]);
+                    if (arrdisplay[index] == 1) {
+                        that.eleLeftMenuTit.eq(index).find('.submenu').show();
+                        that.eleLeftMenuTit.eq(index).addClass('active').attr('data-index','1');
+                        that.eleLeftMenuTit.eq(index).siblings().removeClass('active').attr('data-index','0');
+                    }
+                });
+            }
+            if (strStoreDateInner) {
+                var arrinner = strStoreDateInner.split(",");
+                this.menuInnerA.each(function(index) {
+                    console.log(arrinner[index]);
+                    if (arrinner[index] == 1) {
+                        console.log(arrinner);
+                        that.menuInnerA.removeClass("activeInner").attr('data-index-inner','0');
+                        that.menuInnerA.eq(index).addClass("activeInner").attr('data-index-inner','1');
+                    }
+                });
+            }
+        },
+        /*返回顶部*/
+        returnTopBtn:$(".return-top"),
+        returnTop:function(){
+            this.returnTopBtn.click(function () {
+                var speed=200;//滑动的速度
+                $('body,html').animate({ scrollTop: 0 }, speed);
+                return false;
+            });
+        }
+    };
+    collapseList.init();
+});</script>
+</body>
+</html>
